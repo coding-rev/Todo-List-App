@@ -1,11 +1,12 @@
 from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from .models import TodoModel
+from api.models import Todo
 # Create your views here.
 
 # Retrieve
 def index(request):
-	todos 		= TodoModel.objects.all()
+	todos 		= Todo.objects.all()
 	
 	context = {
 		"todos":todos
@@ -16,7 +17,7 @@ def index(request):
 def createTodo(request):
 	if request.method =="POST":
 		body 		= request.POST.get("body")
-		new_todo  	= TodoModel.objects.create(todo_body=body)
+		new_todo  	= Todo.objects.create(body=body)
 		new_todo.save()
 		return redirect("todo:index")
 
@@ -24,8 +25,8 @@ def createTodo(request):
 def updateTodo(request):
 	if request.method =='POST':
 		body 		= request.POST.get('todo_id')
-		update_todo	= TodoModel.objects.get(id=body)
-		update_todo.finished = True
+		update_todo	= Todo.objects.get(id=body)
+		update_todo.done = True
 		update_todo.save()
 		return redirect('todo:index')
 
@@ -33,7 +34,7 @@ def updateTodo(request):
 def deleteTodo(request):
 	if request.method =='POST':
 		body 		= request.POST.get('todo_id')
-		delete_todo = TodoModel.objects.get(id=body)
+		delete_todo = Todo.objects.get(id=body)
 		delete_todo.delete()
 		return redirect('todo:index')
 
